@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/hacktiv8-ks07-g04/final-project-4/cmd/app"
+)
 
 func main() {
-	fmt.Println("Final Project 4")
+	app.Start()
 }
