@@ -27,6 +27,7 @@ func (u *UsersHandlerImpl) Register(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, errs.BadRequest("Invalid request body"))
+		return
 	}
 
 	response, err := u.usersService.Register(user)

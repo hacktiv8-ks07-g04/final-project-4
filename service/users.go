@@ -4,7 +4,6 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
-	"github.com/hacktiv8-ks07-g04/final-project-4/utils"
 )
 
 var err error
@@ -22,13 +21,6 @@ func UsersServiceInit(repository repository.UsersRepository) *UsersServiceImpl {
 }
 
 func (u *UsersServiceImpl) Register(user entity.User) (*dto.RegisterResponse, error) {
-	hashedPassword, err := utils.HashPassword(user.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	user.Password = hashedPassword
-
 	user, err = u.usersRepository.Register(user)
 
 	response := dto.RegisterResponse{
