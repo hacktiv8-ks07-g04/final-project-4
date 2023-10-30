@@ -12,6 +12,7 @@ import (
 
 type UsersHandler interface {
 	Register(c *gin.Context)
+	Login(c *gin.Context)
 }
 
 type UsersHandlerImpl struct {
@@ -37,4 +38,23 @@ func (u *UsersHandlerImpl) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+func (u *UsersHandlerImpl) Login(c *gin.Context) {
+	user := entity.User{}
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, errs.BadRequest("Invalid request body"))
+		return
+	}
+
+	token, err := u.usersService.Login(user.Email, user.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
 }

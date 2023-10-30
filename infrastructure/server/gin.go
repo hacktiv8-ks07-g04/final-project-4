@@ -31,6 +31,7 @@ func Setup() *gin.Engine {
 	users := router.Group("/users")
 	{
 		users.POST("/register", usersHandler.Register)
+		users.POST("/login", usersHandler.Login)
 	}
 
 	return router
