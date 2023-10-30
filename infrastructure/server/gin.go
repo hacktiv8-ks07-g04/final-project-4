@@ -11,7 +11,7 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
 
-func Start() {
+func Setup() *gin.Engine {
 	router := gin.Default()
 	db := database.GetInstance()
 
@@ -33,5 +33,10 @@ func Start() {
 		users.POST("/register", usersHandler.Register)
 	}
 
+	return router
+}
+
+func Run() {
+	router := Setup()
 	router.Run()
 }

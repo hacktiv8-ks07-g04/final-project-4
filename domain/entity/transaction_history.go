@@ -7,8 +7,8 @@ import (
 
 type TransactionHistory struct {
 	Base
-	Quantity   int  `gorm:"not null;type:int" json:"quantity,omitempty"    valid:"required,type(int)"`
-	TotalPrice int  `gorm:"not null;type:int" json:"total_price,omitempty" valid:"required,type(int)"`
+	Quantity   int  `gorm:"not null;type:int" json:"quantity,omitempty"    valid:"required~quantity is required,type(int)"`
+	TotalPrice int  `gorm:"not null;type:int" json:"total_price,omitempty" valid:"required~total_price is required,type(int)"`
 	UserID     uint `gorm:"not null;type:int" json:"user_id,omitempty"`
 	ProductID  uint `gorm:"not null;type:int" json:"product_id,omitempty"`
 }
