@@ -4,12 +4,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/hacktiv8-ks07-g04/final-project-4/handler"
+	"github.com/hacktiv8-ks07-g04/final-project-4/infrastructure/database"
+	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
+	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
 
 func Start() {
-	r := gin.Default()
+	router := gin.Default()
+	db := database.GetInstance()
 
-	r.GET("/", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "active",
 			"message": "Welcome to the Toko Belanja API",
@@ -17,5 +23,15 @@ func Start() {
 		})
 	})
 
-	r.Run()
+	// Users
+	usersRepo := repository.UsersRepositoryInit(db)
+	usersService := service.UsersServiceInit(usersRepo)
+	usersHandler := handler.UsersHandlerInit(usersService)
+
+	users := router.Group("/users")
+	{
+		users.POST("/register", usersHandler.Register)
+	}
+
+	router.Run()
 }
