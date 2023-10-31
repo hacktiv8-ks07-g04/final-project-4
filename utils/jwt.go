@@ -45,11 +45,13 @@ func ExtractToken(c *gin.Context) string {
 	bearerToken := c.GetHeader("Authorization")
 	if bearerToken == "" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, errs.Unauthorized("Token is required"))
+		return ""
 	}
 
 	// Check token type
 	if strings.Split(bearerToken, " ")[0] != "Bearer" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, errs.Unauthorized("Invalid token type"))
+		return ""
 	}
 
 	// Get bearer token
@@ -76,6 +78,7 @@ func VerifyToken(c *gin.Context) (interface{}, error) {
 	user := map[string]interface{}{
 		"id":    claims.ID,
 		"email": claims.Email,
+		"role":  claims.Role,
 	}
 
 	return user, nil

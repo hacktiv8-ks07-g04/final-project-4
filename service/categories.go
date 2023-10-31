@@ -1,8 +1,14 @@
 package service
 
-import "github.com/hacktiv8-ks07-g04/final-project-4/repository"
+import (
+	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
+	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
+	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
+)
 
-type CategoriesService interface{}
+type CategoriesService interface {
+	Create(req dto.CreateCategoryRequest) (entity.Category, error)
+}
 
 type CategoriesServiceImpl struct {
 	categoriesRepo repository.CategoriesRepository
@@ -10,4 +16,17 @@ type CategoriesServiceImpl struct {
 
 func CategoriesServiceInit(repository repository.CategoriesRepository) *CategoriesServiceImpl {
 	return &CategoriesServiceImpl{repository}
+}
+
+func (c *CategoriesServiceImpl) Create(req dto.CreateCategoryRequest) (entity.Category, error) {
+	category := entity.Category{
+		Type: req.Type,
+	}
+
+	category, err := c.categoriesRepo.Create(category)
+	if err != nil {
+		return category, err
+	}
+
+	return category, nil
 }

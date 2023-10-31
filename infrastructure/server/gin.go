@@ -41,9 +41,19 @@ func Setup() *gin.Engine {
 	categoriesService := service.CategoriesServiceInit(categoriesRepo)
 	categoriesHandler := handler.CategoriesHandlerInit(categoriesService)
 
-	categories := router.Group("/categories")
+	categories := router.Group("/categories").Use(middleware.Authentication())
 	{
+		categories.POST("/", middleware.AdminAuthorization(), categoriesHandler.Create)
 	}
+
+	// Auth Purpose
+	router.GET("/auth", middleware.Authentication(), func(c *gin.Context) {
+		user := c.MustGet("user").(map[string]interface{})
+
+		c.JSON(http.StatusOK, gin.H{
+			"user": user,
+		})
+	})
 
 	return router
 }

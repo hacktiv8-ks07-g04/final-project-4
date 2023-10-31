@@ -14,3 +14,7 @@ type LoginRequest struct {
 type TopUpRequest struct {
 	Balance int `json:"balance" valid:"type(int),range(0|100000000)~balance must be between 0 and 100.000.000"`
 }
+
+type CreateCategoryRequest struct {
+	Type string `json:"type" valid:"required~type is required,type(string)"`
+}
