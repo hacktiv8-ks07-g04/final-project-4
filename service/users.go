@@ -48,7 +48,7 @@ func (u *UsersServiceImpl) Login(email, password string) (string, error) {
 		return "", err
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Email)
+	token, err := utils.GenerateToken(user.ID, user.Email, string(user.Role))
 	if err != nil {
 		return "", err
 	}

@@ -18,13 +18,15 @@ var SECRET_KEY = os.Getenv("SECRET_KEY")
 type Claims struct {
 	ID    uint   `json:"id"`
 	Email string `json:"email"`
+	Role  string `json:"role"`
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(id uint, email string) (string, error) {
+func GenerateToken(id uint, email, role string) (string, error) {
 	claims := Claims{
 		ID:    id,
 		Email: email,
+		Role:  role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * 7 * time.Hour)),
 		},
