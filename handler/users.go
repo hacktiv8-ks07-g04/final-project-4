@@ -48,7 +48,7 @@ func (u *UsersHandlerImpl) Register(c *gin.Context) {
 		CreatedAt: user.CreatedAt,
 	}
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusCreated, response)
 }
 
 func (u *UsersHandlerImpl) Login(c *gin.Context) {
