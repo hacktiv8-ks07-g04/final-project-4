@@ -2,15 +2,12 @@ package utils
 
 import (
 	"errors"
-	"net/http"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-
-	"github.com/hacktiv8-ks07-g04/final-project-4/pkg/errs"
 )
 
 var SECRET_KEY = os.Getenv("SECRET_KEY")
@@ -41,26 +38,25 @@ func GenerateToken(id uint, email, role string) (string, error) {
 	return ss, nil
 }
 
-func ExtractToken(c *gin.Context) string {
+func ExtractToken(c *gin.Context) (string, error) {
 	bearerToken := c.GetHeader("Authorization")
 	if bearerToken == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, errs.Unauthorized("Token is required"))
-		return ""
+		return "", errors.New("token is required")
 	}
 
-	// Check token type
 	if strings.Split(bearerToken, " ")[0] != "Bearer" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, errs.Unauthorized("Invalid token type"))
-		return ""
+		return "", errors.New("invalid token type")
 	}
 
-	// Get bearer token
 	token := strings.Split(bearerToken, " ")[1]
-	return token
+	return token, nil
 }
 
 func VerifyToken(c *gin.Context) (interface{}, error) {
-	tokenString := ExtractToken(c)
+	tokenString, err := ExtractToken(c)
+	if err != nil {
+		return nil, err
+	}
 
 	token, err := jwt.ParseWithClaims(
 		tokenString,
@@ -69,6 +65,9 @@ func VerifyToken(c *gin.Context) (interface{}, error) {
 			return []byte(SECRET_KEY), nil
 		},
 	)
+	if err != nil {
+		return nil, err
+	}
 
 	claims, ok := token.Claims.(*Claims)
 	if !ok && !token.Valid {
