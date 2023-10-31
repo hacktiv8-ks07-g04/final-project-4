@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
+	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
 	"github.com/hacktiv8-ks07-g04/final-project-4/pkg/errs"
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
@@ -24,37 +24,48 @@ func UsersHandlerInit(service service.UsersService) *UsersHandlerImpl {
 }
 
 func (u *UsersHandlerImpl) Register(c *gin.Context) {
-	user := entity.User{}
+	body := dto.RegisterRequest{}
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, errs.BadRequest("Invalid request body"))
 		return
 	}
 
-	response, err := u.usersService.Register(user)
+	user, err := u.usersService.Register(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
+	}
+
+	response := dto.RegisterResponse{
+		ID:        user.ID,
+		FullName:  user.FullName,
+		Email:     user.Email,
+		Password:  user.Password,
+		Balance:   user.Balance,
+		CreatedAt: user.CreatedAt,
 	}
 
 	c.JSON(http.StatusOK, response)
 }
 
 func (u *UsersHandlerImpl) Login(c *gin.Context) {
-	user := entity.User{}
+	body := dto.LoginRequest{}
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, errs.BadRequest("Invalid request body"))
 		return
 	}
 
-	token, err := u.usersService.Login(user.Email, user.Password)
+	token, err := u.usersService.Login(body.Email, body.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
-	})
+	response := dto.LoginResponse{
+		Token: token,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

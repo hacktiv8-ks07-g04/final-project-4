@@ -12,7 +12,7 @@ import (
 var err error
 
 type UsersService interface {
-	Register(user entity.User) (*dto.RegisterResponse, error)
+	Register(req dto.RegisterRequest) (*entity.User, error)
 	Login(email, password string) (string, error)
 }
 
@@ -24,23 +24,19 @@ func UsersServiceInit(repository repository.UsersRepository) *UsersServiceImpl {
 	return &UsersServiceImpl{repository}
 }
 
-func (u *UsersServiceImpl) Register(user entity.User) (*dto.RegisterResponse, error) {
-	user, err = u.usersRepository.Register(user)
-
-	response := dto.RegisterResponse{
-		ID:        user.ID,
-		FullName:  user.FullName,
-		Email:     user.Email,
-		Password:  user.Password,
-		Balance:   user.Balance,
-		CreatedAt: user.CreatedAt,
+func (u *UsersServiceImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
+	user := entity.User{
+		FullName: req.FullName,
+		Email:    req.Email,
+		Password: req.Password,
 	}
 
+	user, err = u.usersRepository.Register(user)
 	if err != nil {
 		return nil, err
 	}
 
-	return &response, nil
+	return &user, nil
 }
 
 func (u *UsersServiceImpl) Login(email, password string) (string, error) {
