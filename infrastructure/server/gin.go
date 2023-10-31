@@ -7,6 +7,7 @@ import (
 
 	"github.com/hacktiv8-ks07-g04/final-project-4/handler"
 	"github.com/hacktiv8-ks07-g04/final-project-4/infrastructure/database"
+	"github.com/hacktiv8-ks07-g04/final-project-4/middleware"
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
@@ -32,6 +33,17 @@ func Setup() *gin.Engine {
 	{
 		users.POST("/register", usersHandler.Register)
 		users.POST("/login", usersHandler.Login)
+	}
+
+	auth := router.Group("/auth").Use(middleware.Authentication())
+	{
+		auth.GET("/profile", func(ctx *gin.Context) {
+			user := ctx.MustGet("user")
+			ctx.JSON(http.StatusOK, gin.H{
+				"status": "success",
+				"data":   user,
+			})
+		})
 	}
 
 	return router
