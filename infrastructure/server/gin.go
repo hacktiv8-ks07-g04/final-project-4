@@ -36,6 +36,15 @@ func Setup() *gin.Engine {
 		users.PATCH("/topup", middleware.Authentication(), usersHandler.TopUp)
 	}
 
+	// Categories
+	categoriesRepo := repository.CategoriesRepositoryInit(db)
+	categoriesService := service.CategoriesServiceInit(categoriesRepo)
+	categoriesHandler := handler.CategoriesHandlerInit(categoriesService)
+
+	categories := router.Group("/categories")
+	{
+	}
+
 	return router
 }
 
