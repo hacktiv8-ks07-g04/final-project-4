@@ -33,17 +33,7 @@ func Setup() *gin.Engine {
 	{
 		users.POST("/register", usersHandler.Register)
 		users.POST("/login", usersHandler.Login)
-	}
-
-	auth := router.Group("/auth").Use(middleware.Authentication())
-	{
-		auth.GET("/profile", func(ctx *gin.Context) {
-			user := ctx.MustGet("user")
-			ctx.JSON(http.StatusOK, gin.H{
-				"status": "success",
-				"data":   user,
-			})
-		})
+		users.PATCH("/topup", middleware.Authentication(), usersHandler.TopUp)
 	}
 
 	return router

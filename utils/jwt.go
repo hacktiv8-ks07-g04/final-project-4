@@ -55,20 +55,26 @@ func ExtractToken(c *gin.Context) string {
 	return token
 }
 
-func VerifyToken(c *gin.Context) (*jwt.MapClaims, error) {
-	token := ExtractToken(c)
+func VerifyToken(c *gin.Context) (interface{}, error) {
+	tokenString := ExtractToken(c)
 
-	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(SECRET_KEY), nil
-	})
-	if err != nil {
+	token, err := jwt.ParseWithClaims(
+		tokenString,
+		&Claims{},
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(SECRET_KEY), nil
+		},
+	)
+
+	claims, ok := token.Claims.(*Claims)
+	if !ok && !token.Valid {
 		return nil, err
 	}
 
-	claims, ok := parsedToken.Claims.(jwt.MapClaims)
-	if !ok || !parsedToken.Valid {
-		return nil, err
+	user := map[string]interface{}{
+		"id":    claims.ID,
+		"email": claims.Email,
 	}
 
-	return &claims, nil
+	return user, nil
 }

@@ -11,6 +11,7 @@ import (
 type UsersRepository interface {
 	Register(user entity.User) (entity.User, error)
 	Login(email, password string) (entity.User, error)
+	TopUp(id uint, balance int) (entity.User, error)
 }
 
 type UsersRepositoryImpl struct {
@@ -41,6 +42,26 @@ func (ur *UsersRepositoryImpl) Login(email, password string) (entity.User, error
 		err := tx.Where("email = ?", email).First(&user).Error
 		if err != nil {
 			return errors.New("user not found")
+		}
+
+		return nil
+	})
+
+	return user, err
+}
+
+func (ur *UsersRepositoryImpl) TopUp(id uint, balance int) (entity.User, error) {
+	var user entity.User
+
+	err := ur.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id = ?", id).First(&user).Error; err != nil {
+			return errors.New("user not found")
+		}
+
+		user.Balance += balance
+
+		if err := tx.Save(&user).Error; err != nil {
+			return err
 		}
 
 		return nil

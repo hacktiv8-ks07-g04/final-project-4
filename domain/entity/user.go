@@ -41,3 +41,12 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 
 	return nil
 }
+
+func (u *User) BeforeSave(tx *gorm.DB) error {
+	_, err := govalidator.ValidateStruct(u)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

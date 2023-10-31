@@ -16,3 +16,7 @@ type RegisterResponse struct {
 type LoginResponse struct {
 	Token string `json:"token"`
 }
+
+type TopUpResponse struct {
+	Message string `json:"message"`
+}

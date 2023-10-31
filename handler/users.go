@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ import (
 type UsersHandler interface {
 	Register(c *gin.Context)
 	Login(c *gin.Context)
+	TopUp(c *gin.Context)
 }
 
 type UsersHandlerImpl struct {
@@ -65,6 +67,28 @@ func (u *UsersHandlerImpl) Login(c *gin.Context) {
 
 	response := dto.LoginResponse{
 		Token: token,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (u *UsersHandlerImpl) TopUp(c *gin.Context) {
+	user := c.MustGet("user").(map[string]interface{})
+	body := dto.TopUpRequest{}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, errs.BadRequest("Invalid request body"))
+		return
+	}
+
+	balance, err := u.usersService.TopUp(user["id"].(uint), body.Balance)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	response := dto.TopUpResponse{
+		Message: fmt.Sprintf("Your balance has been successfully updated to Rp %d", balance),
 	}
 
 	c.JSON(http.StatusOK, response)

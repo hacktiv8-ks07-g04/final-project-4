@@ -12,6 +12,7 @@ var err error
 type UsersService interface {
 	Register(req dto.RegisterRequest) (*entity.User, error)
 	Login(email, password string) (string, error)
+	TopUp(id uint, balance int) (int, error)
 }
 
 type UsersServiceImpl struct {
@@ -53,4 +54,13 @@ func (u *UsersServiceImpl) Login(email, password string) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (u *UsersServiceImpl) TopUp(id uint, balance int) (int, error) {
+	user, err := u.usersRepository.TopUp(id, balance)
+	if err != nil {
+		return 0, err
+	}
+
+	return user.Balance, nil
 }
