@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"errors"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -13,16 +15,29 @@ import (
 
 var SECRET_KEY = os.Getenv("SECRET_KEY")
 
-func GenerateToken(id uint, email string) string {
-	claims := jwt.MapClaims{
-		"id":    id,
-		"email": email,
+type Claims struct {
+	ID    uint   `json:"id"`
+	Email string `json:"email"`
+	jwt.StandardClaims
+}
+
+func GenerateToken(id uint, email string) (string, error) {
+	claims := Claims{
+		ID:    id,
+		Email: email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 7).Unix(),
+			IssuedAt:  time.Now().Unix(),
+		},
 	}
 
 	parsedToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, _ := parsedToken.SignedString([]byte(SECRET_KEY))
+	signedToken, err := parsedToken.SignedString([]byte(SECRET_KEY))
+	if err != nil {
+		return "", errors.New("failed to generate token")
+	}
 
-	return signedToken
+	return signedToken, nil
 }
 
 func ExtractToken(c *gin.Context) string {

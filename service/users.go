@@ -1,8 +1,6 @@
 package service
 
 import (
-	"errors"
-
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
@@ -42,14 +40,17 @@ func (u *UsersServiceImpl) Register(req dto.RegisterRequest) (*entity.User, erro
 func (u *UsersServiceImpl) Login(email, password string) (string, error) {
 	user, err := u.usersRepository.Login(email, password)
 	if err != nil {
-		return "", errors.New("invalid email")
+		return "", err
 	}
 
 	if err := utils.VerifyPassword(user.Password, password); err != nil {
-		return "", errors.New("invalid password")
+		return "", err
 	}
 
-	token := utils.GenerateToken(user.ID, user.Email)
+	token, err := utils.GenerateToken(user.ID, user.Email)
+	if err != nil {
+		return "", err
+	}
 
 	return token, nil
 }
