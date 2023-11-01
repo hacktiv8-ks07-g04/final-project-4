@@ -4,12 +4,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductRepository interface{}
+type ProductsRepository interface{}
 
-type ProductRepositoryImpl struct {
+type ProductsRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func ProductRepositoryInit(db *gorm.DB) ProductRepository {
-	return &ProductRepositoryImpl{db}
+func ProductsRepositoryInit(db *gorm.DB) ProductsRepository {
+	return &ProductsRepositoryImpl{db}
 }
