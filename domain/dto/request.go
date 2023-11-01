@@ -18,3 +18,10 @@ type TopUpRequest struct {
 type CreateCategoryRequest struct {
 	Type string `json:"type" valid:"required~type is required,type(string)"`
 }
+
+type CreateProductRequest struct {
+	Title      string `json:"title"       valid:"required~title is required,type(string)"`
+	Price      int    `json:"price"       valid:"required~price is required,type(int),range(0|50000000)~price must be between 0 and 50.000.000"`
+	Stock      int    `json:"stock"       valid:"required~stock is required,type(int),range(5|1000000)~stock must be at least 5"`
+	CategoryID uint   `json:"category_id"`
+}

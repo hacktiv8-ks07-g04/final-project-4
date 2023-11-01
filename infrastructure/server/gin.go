@@ -49,6 +49,16 @@ func Setup() *gin.Engine {
 		categories.DELETE("/:categoryId", middleware.AdminAuthorization(), categoriesHandler.Delete)
 	}
 
+	// Products
+	productsRepo := repository.ProductsRepositoryInit(db)
+	productsService := service.ProductsServiceInit(productsRepo)
+	productsHandler := handler.ProductsHandlerInit(productsService)
+
+	products := router.Group("/products").Use(middleware.Authentication())
+	{
+		products.POST("/", middleware.AdminAuthorization(), productsHandler.Add)
+	}
+
 	// Auth Purpose
 	router.GET("/auth", middleware.Authentication(), func(c *gin.Context) {
 		user := c.MustGet("user").(map[string]interface{})
