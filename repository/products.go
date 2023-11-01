@@ -22,13 +22,7 @@ func ProductsRepositoryInit(db *gorm.DB) *ProductsRepositoryImpl {
 }
 
 func (r *ProductsRepositoryImpl) Add(product entity.Product) (entity.Product, error) {
-	var category entity.Category
-
 	err := r.db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where("id = ?", product.CategoryID).First(&category).Error; err != nil {
-			return errors.New("category not found")
-		}
-
 		if err := tx.Preload("Category").Create(&product).Error; err != nil {
 			return err
 		}
@@ -51,4 +45,14 @@ func (r *ProductsRepositoryImpl) GetAll() ([]entity.Product, error) {
 	})
 
 	return products, err
+}
+
+func (r *ProductsRepositoryImpl) checkCategory(categoryID uint) error {
+	var category entity.Category
+
+	if err := r.db.Where("id = ?", categoryID).First(&category).Error; err != nil {
+		return errors.New("category not found")
+	}
+
+	return nil
 }

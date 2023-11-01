@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+
 	"github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
 )
@@ -14,10 +16,14 @@ type Product struct {
 	Transactions []TransactionHistory `gorm:"foreignKey:ProductID;constraint:OnUpdate:CASCADE" json:"transactions,omitempty"`
 }
 
-func (p *Product) BeforeCreate(tx *gorm.DB) error {
+func (p *Product) BeforeSave(tx *gorm.DB) error {
 	_, err := govalidator.ValidateStruct(p)
 	if err != nil {
 		return err
+	}
+
+	if err := tx.Model(&Category{}).Where("id = ?", p.CategoryID).First(&Category{}).Error; err != nil {
+		return errors.New("category not found")
 	}
 
 	return nil
