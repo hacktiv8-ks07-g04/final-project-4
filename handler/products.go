@@ -11,7 +11,7 @@ import (
 )
 
 type ProductsHandler interface {
-	Add(c *gin.Context)
+	Create(c *gin.Context)
 	GetAll(c *gin.Context)
 }
 
@@ -23,7 +23,7 @@ func ProductsHandlerInit(service service.ProductsService) *ProductsHandlerImpl {
 	return &ProductsHandlerImpl{service}
 }
 
-func (h *ProductsHandlerImpl) Add(c *gin.Context) {
+func (h *ProductsHandlerImpl) Create(c *gin.Context) {
 	body := dto.CreateProductRequest{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -31,7 +31,7 @@ func (h *ProductsHandlerImpl) Add(c *gin.Context) {
 		return
 	}
 
-	product, err := h.productsService.Add(body)
+	product, err := h.productsService.Create(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return

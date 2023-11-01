@@ -7,7 +7,7 @@ import (
 )
 
 type ProductsService interface {
-	Add(req dto.CreateProductRequest) (entity.Product, error)
+	Create(req dto.CreateProductRequest) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
 }
 
@@ -19,7 +19,7 @@ func ProductsServiceInit(repository repository.ProductsRepository) *ProductsServ
 	return &ProductsServiceImpl{repository}
 }
 
-func (s *ProductsServiceImpl) Add(req dto.CreateProductRequest) (entity.Product, error) {
+func (s *ProductsServiceImpl) Create(req dto.CreateProductRequest) (entity.Product, error) {
 	product := entity.Product{
 		Title:      req.Title,
 		Price:      req.Price,
@@ -27,7 +27,7 @@ func (s *ProductsServiceImpl) Add(req dto.CreateProductRequest) (entity.Product,
 		CategoryID: req.CategoryID,
 	}
 
-	product, err := s.productsRepo.Add(product)
+	product, err := s.productsRepo.Create(product)
 	if err != nil {
 		return product, err
 	}
