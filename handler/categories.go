@@ -12,6 +12,7 @@ import (
 
 type CategoriesHandler interface {
 	Create(c *gin.Context)
+	GetAll(c *gin.Context)
 }
 
 type CategoriesHandlerImpl struct {
@@ -44,4 +45,38 @@ func (h *CategoriesHandlerImpl) Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, response)
+}
+
+func (h *CategoriesHandlerImpl) GetAll(c *gin.Context) {
+	categories, err := h.categoriesService.GetAll()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	var response []dto.GetCategoryResponse
+	for _, category := range categories {
+		var products []dto.GetProductResponse
+		for _, product := range category.Products {
+			products = append(products, dto.GetProductResponse{
+				ID:        product.ID,
+				Title:     product.Title,
+				Price:     product.Price,
+				Stock:     product.Stock,
+				CreatedAt: product.CreatedAt,
+				UpdatedAt: product.UpdatedAt,
+			})
+		}
+
+		response = append(response, dto.GetCategoryResponse{
+			ID:                category.ID,
+			Type:              category.Type,
+			SoldProductAmount: category.SoldProductAmount,
+			CreatedAt:         category.CreatedAt,
+			UpdatedAt:         category.UpdatedAt,
+			Products:          products,
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 }

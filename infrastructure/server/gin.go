@@ -44,6 +44,7 @@ func Setup() *gin.Engine {
 	categories := router.Group("/categories").Use(middleware.Authentication())
 	{
 		categories.POST("/", middleware.AdminAuthorization(), categoriesHandler.Create)
+		categories.GET("/", categoriesHandler.GetAll)
 	}
 
 	// Auth Purpose

@@ -8,6 +8,7 @@ import (
 
 type CategoriesService interface {
 	Create(req dto.CreateCategoryRequest) (entity.Category, error)
+	GetAll() ([]entity.Category, error)
 }
 
 type CategoriesServiceImpl struct {
@@ -29,4 +30,13 @@ func (c *CategoriesServiceImpl) Create(req dto.CreateCategoryRequest) (entity.Ca
 	}
 
 	return category, nil
+}
+
+func (c *CategoriesServiceImpl) GetAll() ([]entity.Category, error) {
+	categories, err := c.categoriesRepo.GetAll()
+	if err != nil {
+		return categories, err
+	}
+
+	return categories, nil
 }
