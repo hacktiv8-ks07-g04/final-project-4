@@ -102,7 +102,7 @@ func (cr *CategoriesRepositoryImpl) Delete(id string) error {
 	}
 
 	err = cr.db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Delete(&category, id).Error
+		err := tx.Select("Products").Delete(&category, id).Error
 		if err != nil {
 			return err
 		}
