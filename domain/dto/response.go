@@ -37,6 +37,10 @@ type GetCategoryResponse struct {
 	Products          []GetProductResponse `json:"products"`
 }
 
+type DeleteCategoryResponse struct {
+	Message string `json:"message"`
+}
+
 type GetProductResponse struct {
 	ID        uint      `json:"id"`
 	Title     string    `json:"title"`

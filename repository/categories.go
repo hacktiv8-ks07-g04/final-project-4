@@ -8,8 +8,10 @@ import (
 
 type CategoriesRepository interface {
 	Create(category entity.Category) (entity.Category, error)
+	Get(id string) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
 	Update(id, updatedType string) (entity.Category, error)
+	Delete(id string) error
 }
 
 type CategoriesRepositoryImpl struct {
@@ -31,6 +33,24 @@ func (cr *CategoriesRepositoryImpl) Create(category entity.Category) (entity.Cat
 	})
 
 	return category, err
+}
+
+func (cr *CategoriesRepositoryImpl) Get(id string) (entity.Category, error) {
+	var category entity.Category
+
+	err := cr.db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Preload("Products").First(&category, id).Error
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return category, err
+	}
+
+	return category, nil
 }
 
 func (cr *CategoriesRepositoryImpl) GetAll() ([]entity.Category, error) {
@@ -70,4 +90,25 @@ func (cr *CategoriesRepositoryImpl) Update(id, updatedType string) (entity.Categ
 	})
 
 	return category, err
+}
+
+func (cr *CategoriesRepositoryImpl) Delete(id string) error {
+	var category entity.Category
+	var err error
+
+	category, err = cr.Get(id)
+	if err != nil {
+		return err
+	}
+
+	err = cr.db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Delete(&category, id).Error
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return err
 }

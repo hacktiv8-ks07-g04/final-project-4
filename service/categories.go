@@ -10,6 +10,7 @@ type CategoriesService interface {
 	Create(req dto.CreateCategoryRequest) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
 	Update(id, updatedType string) (entity.Category, error)
+	Delete(id string) error
 }
 
 type CategoriesServiceImpl struct {
@@ -49,4 +50,13 @@ func (c *CategoriesServiceImpl) Update(id, updatedType string) (entity.Category,
 	}
 
 	return category, nil
+}
+
+func (c *CategoriesServiceImpl) Delete(id string) error {
+	err := c.categoriesRepo.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

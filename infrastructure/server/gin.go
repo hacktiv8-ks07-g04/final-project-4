@@ -46,6 +46,7 @@ func Setup() *gin.Engine {
 		categories.POST("/", middleware.AdminAuthorization(), categoriesHandler.Create)
 		categories.GET("/", categoriesHandler.GetAll)
 		categories.PATCH("/:categoryId", middleware.AdminAuthorization(), categoriesHandler.Update)
+		categories.DELETE("/:categoryId", middleware.AdminAuthorization(), categoriesHandler.Delete)
 	}
 
 	// Auth Purpose

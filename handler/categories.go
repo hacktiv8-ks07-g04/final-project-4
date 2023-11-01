@@ -14,6 +14,7 @@ type CategoriesHandler interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
 	Update(c *gin.Context)
+	Delete(c *gin.Context)
 }
 
 type CategoriesHandlerImpl struct {
@@ -102,6 +103,22 @@ func (h *CategoriesHandlerImpl) Update(c *gin.Context) {
 		Type:              category.Type,
 		SoldProductAmount: category.SoldProductAmount,
 		CreatedAt:         category.CreatedAt,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *CategoriesHandlerImpl) Delete(c *gin.Context) {
+	id := c.Param("categoryId")
+
+	err := h.categoriesService.Delete(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	response := dto.DeleteCategoryResponse{
+		Message: "Category has been successfully deleted",
 	}
 
 	c.JSON(http.StatusOK, response)
