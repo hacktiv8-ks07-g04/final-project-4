@@ -9,6 +9,7 @@ import (
 type CategoriesService interface {
 	Create(req dto.CreateCategoryRequest) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
+	Update(id, updatedType string) (entity.Category, error)
 }
 
 type CategoriesServiceImpl struct {
@@ -39,4 +40,13 @@ func (c *CategoriesServiceImpl) GetAll() ([]entity.Category, error) {
 	}
 
 	return categories, nil
+}
+
+func (c *CategoriesServiceImpl) Update(id, updatedType string) (entity.Category, error) {
+	category, err := c.categoriesRepo.Update(id, updatedType)
+	if err != nil {
+		return category, err
+	}
+
+	return category, nil
 }

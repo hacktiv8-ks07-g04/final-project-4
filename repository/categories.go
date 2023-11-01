@@ -9,6 +9,7 @@ import (
 type CategoriesRepository interface {
 	Create(category entity.Category) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
+	Update(id, updatedType string) (entity.Category, error)
 }
 
 type CategoriesRepositoryImpl struct {
@@ -48,4 +49,25 @@ func (cr *CategoriesRepositoryImpl) GetAll() ([]entity.Category, error) {
 	}
 
 	return categories, nil
+}
+
+func (cr *CategoriesRepositoryImpl) Update(id, updatedType string) (entity.Category, error) {
+	var category entity.Category
+
+	err := cr.db.Transaction(func(tx *gorm.DB) error {
+		var err error
+		err = tx.Model(&category).Where("id = ?", id).Update("type", updatedType).Error
+		if err != nil {
+			return err
+		}
+
+		err = tx.Preload("Products").Find(&category).Error
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return category, err
 }

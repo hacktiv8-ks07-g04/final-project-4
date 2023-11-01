@@ -13,6 +13,7 @@ import (
 type CategoriesHandler interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
+	Update(c *gin.Context)
 }
 
 type CategoriesHandlerImpl struct {
@@ -76,6 +77,31 @@ func (h *CategoriesHandlerImpl) GetAll(c *gin.Context) {
 			UpdatedAt:         category.UpdatedAt,
 			Products:          products,
 		})
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *CategoriesHandlerImpl) Update(c *gin.Context) {
+	body := dto.CreateCategoryRequest{}
+	id := c.Param("categoryId")
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, errs.BadRequest("invalid request body"))
+		return
+	}
+
+	category, err := h.categoriesService.Update(id, body.Type)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	response := dto.CreateCategoryResponse{
+		ID:                category.ID,
+		Type:              category.Type,
+		SoldProductAmount: category.SoldProductAmount,
+		CreatedAt:         category.CreatedAt,
 	}
 
 	c.JSON(http.StatusOK, response)
