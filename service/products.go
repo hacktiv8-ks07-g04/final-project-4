@@ -8,6 +8,7 @@ import (
 
 type ProductsService interface {
 	Add(req dto.CreateProductRequest) (entity.Product, error)
+	GetAll() ([]entity.Product, error)
 }
 
 type ProductsServiceImpl struct {
@@ -32,4 +33,13 @@ func (s *ProductsServiceImpl) Add(req dto.CreateProductRequest) (entity.Product,
 	}
 
 	return product, nil
+}
+
+func (s *ProductsServiceImpl) GetAll() ([]entity.Product, error) {
+	products, err := s.productsRepo.GetAll()
+	if err != nil {
+		return products, err
+	}
+
+	return products, nil
 }

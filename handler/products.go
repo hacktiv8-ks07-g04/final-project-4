@@ -12,6 +12,7 @@ import (
 
 type ProductsHandler interface {
 	Add(c *gin.Context)
+	GetAll(c *gin.Context)
 }
 
 type ProductsHandlerImpl struct {
@@ -46,4 +47,27 @@ func (h *ProductsHandlerImpl) Add(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, response)
+}
+
+func (h *ProductsHandlerImpl) GetAll(c *gin.Context) {
+	products, err := h.productsService.GetAll()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	response := []dto.CreateProductResponse{}
+
+	for _, product := range products {
+		response = append(response, dto.CreateProductResponse{
+			ID:         product.ID,
+			Title:      product.Title,
+			Price:      product.Price,
+			Stock:      product.Stock,
+			CategoryID: product.CategoryID,
+			CreatedAt:  product.CreatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 }

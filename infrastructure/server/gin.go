@@ -57,6 +57,7 @@ func Setup() *gin.Engine {
 	products := router.Group("/products").Use(middleware.Authentication())
 	{
 		products.POST("/", middleware.AdminAuthorization(), productsHandler.Add)
+		products.GET("/", productsHandler.GetAll)
 	}
 
 	// Auth Purpose

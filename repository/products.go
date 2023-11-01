@@ -10,6 +10,7 @@ import (
 
 type ProductsRepository interface {
 	Add(product entity.Product) (entity.Product, error)
+	GetAll() ([]entity.Product, error)
 }
 
 type ProductsRepositoryImpl struct {
@@ -36,4 +37,18 @@ func (r *ProductsRepositoryImpl) Add(product entity.Product) (entity.Product, er
 	})
 
 	return product, err
+}
+
+func (r *ProductsRepositoryImpl) GetAll() ([]entity.Product, error) {
+	var products []entity.Product
+
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Find(&products).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return products, err
 }
