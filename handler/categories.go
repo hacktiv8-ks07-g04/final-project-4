@@ -52,7 +52,7 @@ func (h *CategoriesHandlerImpl) Create(c *gin.Context) {
 func (h *CategoriesHandlerImpl) GetAll(c *gin.Context) {
 	categories, err := h.categoriesService.GetAll()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		c.JSON(http.StatusNotFound, errs.NotFound("categories not found"))
 		return
 	}
 
@@ -94,7 +94,7 @@ func (h *CategoriesHandlerImpl) Update(c *gin.Context) {
 
 	category, err := h.categoriesService.Update(id, body.Type)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		c.JSON(http.StatusNotFound, errs.NotFound("category not found"))
 		return
 	}
 
@@ -113,7 +113,7 @@ func (h *CategoriesHandlerImpl) Delete(c *gin.Context) {
 
 	err := h.categoriesService.Delete(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		c.JSON(http.StatusNotFound, errs.NotFound("category not found"))
 		return
 	}
 

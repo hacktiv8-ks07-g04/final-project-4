@@ -61,7 +61,7 @@ func (u *UsersHandlerImpl) Login(c *gin.Context) {
 
 	token, err := u.usersService.Login(body.Email, body.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		c.JSON(http.StatusUnauthorized, errs.Unauthorized("Invalid email or password"))
 		return
 	}
 
