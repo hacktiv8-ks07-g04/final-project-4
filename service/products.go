@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
@@ -9,6 +11,7 @@ import (
 type ProductsService interface {
 	Create(req dto.CreateProductRequest) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
+	Update(id string, req dto.UpdateProductRequest) (entity.Product, error)
 }
 
 type ProductsServiceImpl struct {
@@ -42,4 +45,17 @@ func (s *ProductsServiceImpl) GetAll() ([]entity.Product, error) {
 	}
 
 	return products, nil
+}
+
+func (s *ProductsServiceImpl) Update(
+	id string,
+	req dto.UpdateProductRequest,
+) (entity.Product, error) {
+	log.Print("req", req)
+	product, err := s.productsRepo.Update(id, req)
+	if err != nil {
+		return product, err
+	}
+
+	return product, nil
 }

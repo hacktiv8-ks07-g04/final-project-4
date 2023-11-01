@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ import (
 type ProductsHandler interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
+	Update(c *gin.Context)
 }
 
 type ProductsHandlerImpl struct {
@@ -67,6 +69,37 @@ func (h *ProductsHandlerImpl) GetAll(c *gin.Context) {
 			CategoryID: product.CategoryID,
 			CreatedAt:  product.CreatedAt,
 		})
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *ProductsHandlerImpl) Update(c *gin.Context) {
+	body := dto.UpdateProductRequest{}
+	id := c.Param("productId")
+
+	log.Print("id ", id)
+	log.Print("body ", body)
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, errs.BadRequest("invalid request body"))
+		return
+	}
+
+	product, err := h.productsService.Update(id, body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	response := dto.UpdateProductResponse{
+		ID:         product.ID,
+		Title:      product.Title,
+		Price:      product.Price,
+		Stock:      product.Stock,
+		CategoryID: product.CategoryID,
+		CreatedAt:  product.CreatedAt,
+		UpdatedAt:  product.UpdatedAt,
 	}
 
 	c.JSON(http.StatusOK, response)
