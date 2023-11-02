@@ -62,6 +62,15 @@ func Setup() *gin.Engine {
 		products.DELETE("/:productId", productsHandler.Delete)
 	}
 
+	// Transactions
+	transactionsRepo := repository.TransactionsRepositoryInit(db)
+	transactionsService := service.TransactionsServiceInit(transactionsRepo)
+	transactionsHandler := handler.TransactionsHandlerInit(transactionsService)
+
+	transactions := router.Group("/transactions").Use(middleware.Authentication())
+	{
+	}
+
 	// Auth Purpose
 	router.GET("/auth", middleware.Authentication(), func(c *gin.Context) {
 		user := c.MustGet("user").(map[string]interface{})
