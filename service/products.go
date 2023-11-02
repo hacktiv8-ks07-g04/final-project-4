@@ -16,7 +16,7 @@ type Products interface {
 }
 
 type ProductsImpl struct {
-	productsRepo repository.Products
+	repository repository.Products
 }
 
 func InitProducts(repository repository.Products) *ProductsImpl {
@@ -31,7 +31,7 @@ func (s *ProductsImpl) Create(req dto.CreateProductRequest) (entity.Product, err
 		CategoryID: req.CategoryID,
 	}
 
-	product, err := s.productsRepo.Create(product)
+	product, err := s.repository.Create(product)
 	if err != nil {
 		return product, err
 	}
@@ -40,7 +40,7 @@ func (s *ProductsImpl) Create(req dto.CreateProductRequest) (entity.Product, err
 }
 
 func (s *ProductsImpl) GetAll() ([]entity.Product, error) {
-	products, err := s.productsRepo.GetAll()
+	products, err := s.repository.GetAll()
 	if err != nil {
 		return products, err
 	}
@@ -53,7 +53,7 @@ func (s *ProductsImpl) Update(
 	req dto.UpdateProductRequest,
 ) (entity.Product, error) {
 	log.Print("req", req)
-	product, err := s.productsRepo.Update(id, req)
+	product, err := s.repository.Update(id, req)
 	if err != nil {
 		return product, err
 	}
@@ -62,7 +62,7 @@ func (s *ProductsImpl) Update(
 }
 
 func (s *ProductsImpl) Delete(id string) error {
-	err := s.productsRepo.Delete(id)
+	err := s.repository.Delete(id)
 	if err != nil {
 		return err
 	}

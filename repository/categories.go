@@ -22,8 +22,8 @@ func InitCategories(db *gorm.DB) *CategoriesImpl {
 	return &CategoriesImpl{db}
 }
 
-func (cr *CategoriesImpl) Create(category entity.Category) (entity.Category, error) {
-	err := cr.db.Transaction(func(tx *gorm.DB) error {
+func (r *CategoriesImpl) Create(category entity.Category) (entity.Category, error) {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&category).Error
 		if err != nil {
 			return err
@@ -35,10 +35,10 @@ func (cr *CategoriesImpl) Create(category entity.Category) (entity.Category, err
 	return category, err
 }
 
-func (cr *CategoriesImpl) Get(id string) (entity.Category, error) {
+func (r *CategoriesImpl) Get(id string) (entity.Category, error) {
 	var category entity.Category
 
-	err := cr.db.Transaction(func(tx *gorm.DB) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Preload("Products").First(&category, id).Error
 		if err != nil {
 			return err
@@ -53,10 +53,10 @@ func (cr *CategoriesImpl) Get(id string) (entity.Category, error) {
 	return category, nil
 }
 
-func (cr *CategoriesImpl) GetAll() ([]entity.Category, error) {
+func (r *CategoriesImpl) GetAll() ([]entity.Category, error) {
 	var categories []entity.Category
 
-	err := cr.db.Transaction(func(tx *gorm.DB) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Preload("Products").Find(&categories).Error
 		if err != nil {
 			return err
@@ -71,10 +71,10 @@ func (cr *CategoriesImpl) GetAll() ([]entity.Category, error) {
 	return categories, nil
 }
 
-func (cr *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
+func (r *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
 	var category entity.Category
 
-	err := cr.db.Transaction(func(tx *gorm.DB) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		var err error
 		err = tx.Model(&category).Where("id = ?", id).Update("type", updatedType).Error
 		if err != nil {
@@ -92,16 +92,16 @@ func (cr *CategoriesImpl) Update(id, updatedType string) (entity.Category, error
 	return category, err
 }
 
-func (cr *CategoriesImpl) Delete(id string) error {
+func (r *CategoriesImpl) Delete(id string) error {
 	var category entity.Category
 	var err error
 
-	category, err = cr.Get(id)
+	category, err = r.Get(id)
 	if err != nil {
 		return err
 	}
 
-	err = cr.db.Transaction(func(tx *gorm.DB) error {
+	err = r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Select("Products").Delete(&category, id).Error
 		if err != nil {
 			return err

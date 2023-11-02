@@ -16,21 +16,21 @@ type Users interface {
 }
 
 type UsersImpl struct {
-	usersRepository repository.Users
+	repository repository.Users
 }
 
 func InitUsers(repository repository.Users) *UsersImpl {
 	return &UsersImpl{repository}
 }
 
-func (u *UsersImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
+func (s *UsersImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
 	user := entity.User{
 		FullName: req.FullName,
 		Email:    req.Email,
 		Password: req.Password,
 	}
 
-	user, err = u.usersRepository.Register(user)
+	user, err = s.repository.Register(user)
 	if err != nil {
 		return nil, err
 	}
@@ -38,8 +38,8 @@ func (u *UsersImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u *UsersImpl) Login(email, password string) (string, error) {
-	user, err := u.usersRepository.Login(email, password)
+func (s *UsersImpl) Login(email, password string) (string, error) {
+	user, err := s.repository.Login(email, password)
 	if err != nil {
 		return "", err
 	}
@@ -56,8 +56,8 @@ func (u *UsersImpl) Login(email, password string) (string, error) {
 	return token, nil
 }
 
-func (u *UsersImpl) TopUp(id uint, balance int) (int, error) {
-	user, err := u.usersRepository.TopUp(id, balance)
+func (s *UsersImpl) TopUp(id uint, balance int) (int, error) {
+	user, err := s.repository.TopUp(id, balance)
 	if err != nil {
 		return 0, err
 	}

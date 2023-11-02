@@ -19,7 +19,7 @@ type Products interface {
 }
 
 type ProductsImpl struct {
-	productsService service.Products
+	service service.Products
 }
 
 func InitProducts(service service.Products) *ProductsImpl {
@@ -34,7 +34,7 @@ func (h *ProductsImpl) Create(c *gin.Context) {
 		return
 	}
 
-	product, err := h.productsService.Create(body)
+	product, err := h.service.Create(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
@@ -53,7 +53,7 @@ func (h *ProductsImpl) Create(c *gin.Context) {
 }
 
 func (h *ProductsImpl) GetAll(c *gin.Context) {
-	products, err := h.productsService.GetAll()
+	products, err := h.service.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
@@ -87,7 +87,7 @@ func (h *ProductsImpl) Update(c *gin.Context) {
 		return
 	}
 
-	product, err := h.productsService.Update(id, body)
+	product, err := h.service.Update(id, body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
@@ -109,7 +109,7 @@ func (h *ProductsImpl) Update(c *gin.Context) {
 func (h *ProductsImpl) Delete(c *gin.Context) {
 	id := c.Param("productId")
 
-	err := h.productsService.Delete(id)
+	err := h.service.Delete(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, errs.NotFound("product not found"))
 		return

@@ -22,8 +22,8 @@ func InitUsers(db *gorm.DB) *UsersImpl {
 	return &UsersImpl{db}
 }
 
-func (ur *UsersImpl) Register(user entity.User) (entity.User, error) {
-	err := ur.db.Transaction(func(tx *gorm.DB) error {
+func (r *UsersImpl) Register(user entity.User) (entity.User, error) {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&user).Error
 		if err != nil {
 			return err
@@ -35,10 +35,10 @@ func (ur *UsersImpl) Register(user entity.User) (entity.User, error) {
 	return user, err
 }
 
-func (ur *UsersImpl) Login(email, password string) (entity.User, error) {
+func (r *UsersImpl) Login(email, password string) (entity.User, error) {
 	var user entity.User
 
-	err := ur.db.Transaction(func(tx *gorm.DB) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Where("email = ?", email).First(&user).Error
 		if err != nil {
 			return errors.New("user not found")
@@ -50,10 +50,10 @@ func (ur *UsersImpl) Login(email, password string) (entity.User, error) {
 	return user, err
 }
 
-func (ur *UsersImpl) TopUp(id uint, balance int) (entity.User, error) {
+func (r *UsersImpl) TopUp(id uint, balance int) (entity.User, error) {
 	var user entity.User
 
-	err := ur.db.Transaction(func(tx *gorm.DB) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("id = ?", id).First(&user).Error; err != nil {
 			return errors.New("user not found")
 		}

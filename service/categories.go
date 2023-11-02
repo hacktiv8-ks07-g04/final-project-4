@@ -14,19 +14,19 @@ type Categories interface {
 }
 
 type CategoriesImpl struct {
-	categoriesRepo repository.Categories
+	repository repository.Categories
 }
 
 func InitCategories(repository repository.Categories) *CategoriesImpl {
 	return &CategoriesImpl{repository}
 }
 
-func (c *CategoriesImpl) Create(req dto.CreateCategoryRequest) (entity.Category, error) {
+func (s *CategoriesImpl) Create(req dto.CreateCategoryRequest) (entity.Category, error) {
 	category := entity.Category{
 		Type: req.Type,
 	}
 
-	category, err := c.categoriesRepo.Create(category)
+	category, err := s.repository.Create(category)
 	if err != nil {
 		return category, err
 	}
@@ -34,8 +34,8 @@ func (c *CategoriesImpl) Create(req dto.CreateCategoryRequest) (entity.Category,
 	return category, nil
 }
 
-func (c *CategoriesImpl) GetAll() ([]entity.Category, error) {
-	categories, err := c.categoriesRepo.GetAll()
+func (s *CategoriesImpl) GetAll() ([]entity.Category, error) {
+	categories, err := s.repository.GetAll()
 	if err != nil {
 		return categories, err
 	}
@@ -43,8 +43,8 @@ func (c *CategoriesImpl) GetAll() ([]entity.Category, error) {
 	return categories, nil
 }
 
-func (c *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
-	category, err := c.categoriesRepo.Update(id, updatedType)
+func (s *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
+	category, err := s.repository.Update(id, updatedType)
 	if err != nil {
 		return category, err
 	}
@@ -52,8 +52,8 @@ func (c *CategoriesImpl) Update(id, updatedType string) (entity.Category, error)
 	return category, nil
 }
 
-func (c *CategoriesImpl) Delete(id string) error {
-	err := c.categoriesRepo.Delete(id)
+func (s *CategoriesImpl) Delete(id string) error {
+	err := s.repository.Delete(id)
 	if err != nil {
 		return err
 	}

@@ -18,7 +18,7 @@ type Users interface {
 }
 
 type UsersImpl struct {
-	usersService service.Users
+	service service.Users
 }
 
 func InitUsers(service service.Users) *UsersImpl {
@@ -33,7 +33,7 @@ func (u *UsersImpl) Register(c *gin.Context) {
 		return
 	}
 
-	user, err := u.usersService.Register(body)
+	user, err := u.service.Register(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
@@ -59,7 +59,7 @@ func (u *UsersImpl) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := u.usersService.Login(body.Email, body.Password)
+	token, err := u.service.Login(body.Email, body.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, errs.Unauthorized("Invalid email or password"))
 		return
@@ -81,7 +81,7 @@ func (u *UsersImpl) TopUp(c *gin.Context) {
 		return
 	}
 
-	balance, err := u.usersService.TopUp(user["id"].(uint), body.Balance)
+	balance, err := u.service.TopUp(user["id"].(uint), body.Balance)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return

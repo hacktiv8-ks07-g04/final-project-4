@@ -18,7 +18,7 @@ type Categories interface {
 }
 
 type CategoriesImpl struct {
-	categoriesService service.Categories
+	service service.Categories
 }
 
 func InitCategories(service service.Categories) *CategoriesImpl {
@@ -33,7 +33,7 @@ func (h *CategoriesImpl) Create(c *gin.Context) {
 		return
 	}
 
-	category, err := h.categoriesService.Create(body)
+	category, err := h.service.Create(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
 		return
@@ -50,7 +50,7 @@ func (h *CategoriesImpl) Create(c *gin.Context) {
 }
 
 func (h *CategoriesImpl) GetAll(c *gin.Context) {
-	categories, err := h.categoriesService.GetAll()
+	categories, err := h.service.GetAll()
 	if err != nil {
 		c.JSON(http.StatusNotFound, errs.NotFound("categories not found"))
 		return
@@ -92,7 +92,7 @@ func (h *CategoriesImpl) Update(c *gin.Context) {
 		return
 	}
 
-	category, err := h.categoriesService.Update(id, body.Type)
+	category, err := h.service.Update(id, body.Type)
 	if err != nil {
 		c.JSON(http.StatusNotFound, errs.NotFound("category not found"))
 		return
@@ -111,7 +111,7 @@ func (h *CategoriesImpl) Update(c *gin.Context) {
 func (h *CategoriesImpl) Delete(c *gin.Context) {
 	id := c.Param("categoryId")
 
-	err := h.categoriesService.Delete(id)
+	err := h.service.Delete(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, errs.NotFound("category not found"))
 		return
