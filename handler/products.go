@@ -15,6 +15,7 @@ type ProductsHandler interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
 	Update(c *gin.Context)
+	Delete(c *gin.Context)
 }
 
 type ProductsHandlerImpl struct {
@@ -103,4 +104,18 @@ func (h *ProductsHandlerImpl) Update(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *ProductsHandlerImpl) Delete(c *gin.Context) {
+	id := c.Param("productId")
+
+	err := h.productsService.Delete(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, errs.NotFound("product not found"))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Product has been successfully deleted",
+	})
 }

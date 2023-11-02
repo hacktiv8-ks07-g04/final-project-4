@@ -11,6 +11,7 @@ type ProductsRepository interface {
 	Create(product entity.Product) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
 	Update(id string, updatedProduct dto.UpdateProductRequest) (entity.Product, error)
+	Delete(id string) error
 }
 
 type ProductsRepositoryImpl struct {
@@ -70,4 +71,20 @@ func (r *ProductsRepositoryImpl) Update(
 	})
 
 	return product, err
+}
+
+func (r *ProductsRepositoryImpl) Delete(id string) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id = ?", id).First(&entity.Product{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&entity.Product{}, id).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return err
 }

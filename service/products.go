@@ -12,6 +12,7 @@ type ProductsService interface {
 	Create(req dto.CreateProductRequest) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
 	Update(id string, req dto.UpdateProductRequest) (entity.Product, error)
+	Delete(id string) error
 }
 
 type ProductsServiceImpl struct {
@@ -58,4 +59,13 @@ func (s *ProductsServiceImpl) Update(
 	}
 
 	return product, nil
+}
+
+func (s *ProductsServiceImpl) Delete(id string) error {
+	err := s.productsRepo.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

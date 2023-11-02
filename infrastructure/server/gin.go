@@ -59,6 +59,7 @@ func Setup() *gin.Engine {
 		products.POST("/", middleware.AdminAuthorization(), productsHandler.Create)
 		products.GET("/", productsHandler.GetAll)
 		products.PUT("/:productId", productsHandler.Update)
+		products.DELETE("/:productId", productsHandler.Delete)
 	}
 
 	// Auth Purpose
