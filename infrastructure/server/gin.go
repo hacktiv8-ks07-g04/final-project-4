@@ -58,7 +58,7 @@ func Setup() *gin.Engine {
 	{
 		products.POST("/", middleware.AdminAuthorization(), productsHandler.Create)
 		products.GET("/", productsHandler.GetAll)
-		products.PATCH("/:productId", productsHandler.Update)
+		products.PUT("/:productId", productsHandler.Update)
 	}
 
 	// Auth Purpose
