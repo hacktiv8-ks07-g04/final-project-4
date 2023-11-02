@@ -19,10 +19,10 @@ type ProductsHandler interface {
 }
 
 type ProductsHandlerImpl struct {
-	productsService service.ProductsService
+	productsService service.Products
 }
 
-func ProductsHandlerInit(service service.ProductsService) *ProductsHandlerImpl {
+func ProductsHandlerInit(service service.Products) *ProductsHandlerImpl {
 	return &ProductsHandlerImpl{service}
 }
 

@@ -18,10 +18,10 @@ type CategoriesHandler interface {
 }
 
 type CategoriesHandlerImpl struct {
-	categoriesService service.CategoriesService
+	categoriesService service.Categories
 }
 
-func CategoriesHandlerInit(service service.CategoriesService) *CategoriesHandlerImpl {
+func CategoriesHandlerInit(service service.Categories) *CategoriesHandlerImpl {
 	return &CategoriesHandlerImpl{service}
 }
 

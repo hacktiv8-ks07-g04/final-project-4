@@ -8,22 +8,22 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
 )
 
-type ProductsService interface {
+type Products interface {
 	Create(req dto.CreateProductRequest) (entity.Product, error)
 	GetAll() ([]entity.Product, error)
 	Update(id string, req dto.UpdateProductRequest) (entity.Product, error)
 	Delete(id string) error
 }
 
-type ProductsServiceImpl struct {
+type ProductsImpl struct {
 	productsRepo repository.ProductsRepository
 }
 
-func ProductsServiceInit(repository repository.ProductsRepository) *ProductsServiceImpl {
-	return &ProductsServiceImpl{repository}
+func InitProducts(repository repository.ProductsRepository) *ProductsImpl {
+	return &ProductsImpl{repository}
 }
 
-func (s *ProductsServiceImpl) Create(req dto.CreateProductRequest) (entity.Product, error) {
+func (s *ProductsImpl) Create(req dto.CreateProductRequest) (entity.Product, error) {
 	product := entity.Product{
 		Title:      req.Title,
 		Price:      req.Price,
@@ -39,7 +39,7 @@ func (s *ProductsServiceImpl) Create(req dto.CreateProductRequest) (entity.Produ
 	return product, nil
 }
 
-func (s *ProductsServiceImpl) GetAll() ([]entity.Product, error) {
+func (s *ProductsImpl) GetAll() ([]entity.Product, error) {
 	products, err := s.productsRepo.GetAll()
 	if err != nil {
 		return products, err
@@ -48,7 +48,7 @@ func (s *ProductsServiceImpl) GetAll() ([]entity.Product, error) {
 	return products, nil
 }
 
-func (s *ProductsServiceImpl) Update(
+func (s *ProductsImpl) Update(
 	id string,
 	req dto.UpdateProductRequest,
 ) (entity.Product, error) {
@@ -61,7 +61,7 @@ func (s *ProductsServiceImpl) Update(
 	return product, nil
 }
 
-func (s *ProductsServiceImpl) Delete(id string) error {
+func (s *ProductsImpl) Delete(id string) error {
 	err := s.productsRepo.Delete(id)
 	if err != nil {
 		return err

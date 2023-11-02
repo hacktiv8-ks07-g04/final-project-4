@@ -9,21 +9,21 @@ import (
 
 var err error
 
-type UsersService interface {
+type Users interface {
 	Register(req dto.RegisterRequest) (*entity.User, error)
 	Login(email, password string) (string, error)
 	TopUp(id uint, balance int) (int, error)
 }
 
-type UsersServiceImpl struct {
+type UsersImpl struct {
 	usersRepository repository.UsersRepository
 }
 
-func UsersServiceInit(repository repository.UsersRepository) *UsersServiceImpl {
-	return &UsersServiceImpl{repository}
+func InitUsers(repository repository.UsersRepository) *UsersImpl {
+	return &UsersImpl{repository}
 }
 
-func (u *UsersServiceImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
+func (u *UsersImpl) Register(req dto.RegisterRequest) (*entity.User, error) {
 	user := entity.User{
 		FullName: req.FullName,
 		Email:    req.Email,
@@ -38,7 +38,7 @@ func (u *UsersServiceImpl) Register(req dto.RegisterRequest) (*entity.User, erro
 	return &user, nil
 }
 
-func (u *UsersServiceImpl) Login(email, password string) (string, error) {
+func (u *UsersImpl) Login(email, password string) (string, error) {
 	user, err := u.usersRepository.Login(email, password)
 	if err != nil {
 		return "", err
@@ -56,7 +56,7 @@ func (u *UsersServiceImpl) Login(email, password string) (string, error) {
 	return token, nil
 }
 
-func (u *UsersServiceImpl) TopUp(id uint, balance int) (int, error) {
+func (u *UsersImpl) TopUp(id uint, balance int) (int, error) {
 	user, err := u.usersRepository.TopUp(id, balance)
 	if err != nil {
 		return 0, err

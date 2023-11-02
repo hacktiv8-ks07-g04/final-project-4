@@ -6,22 +6,22 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
 )
 
-type CategoriesService interface {
+type Categories interface {
 	Create(req dto.CreateCategoryRequest) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
 	Update(id, updatedType string) (entity.Category, error)
 	Delete(id string) error
 }
 
-type CategoriesServiceImpl struct {
+type CategoriesImpl struct {
 	categoriesRepo repository.CategoriesRepository
 }
 
-func CategoriesServiceInit(repository repository.CategoriesRepository) *CategoriesServiceImpl {
-	return &CategoriesServiceImpl{repository}
+func InitCategories(repository repository.CategoriesRepository) *CategoriesImpl {
+	return &CategoriesImpl{repository}
 }
 
-func (c *CategoriesServiceImpl) Create(req dto.CreateCategoryRequest) (entity.Category, error) {
+func (c *CategoriesImpl) Create(req dto.CreateCategoryRequest) (entity.Category, error) {
 	category := entity.Category{
 		Type: req.Type,
 	}
@@ -34,7 +34,7 @@ func (c *CategoriesServiceImpl) Create(req dto.CreateCategoryRequest) (entity.Ca
 	return category, nil
 }
 
-func (c *CategoriesServiceImpl) GetAll() ([]entity.Category, error) {
+func (c *CategoriesImpl) GetAll() ([]entity.Category, error) {
 	categories, err := c.categoriesRepo.GetAll()
 	if err != nil {
 		return categories, err
@@ -43,7 +43,7 @@ func (c *CategoriesServiceImpl) GetAll() ([]entity.Category, error) {
 	return categories, nil
 }
 
-func (c *CategoriesServiceImpl) Update(id, updatedType string) (entity.Category, error) {
+func (c *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
 	category, err := c.categoriesRepo.Update(id, updatedType)
 	if err != nil {
 		return category, err
@@ -52,7 +52,7 @@ func (c *CategoriesServiceImpl) Update(id, updatedType string) (entity.Category,
 	return category, nil
 }
 
-func (c *CategoriesServiceImpl) Delete(id string) error {
+func (c *CategoriesImpl) Delete(id string) error {
 	err := c.categoriesRepo.Delete(id)
 	if err != nil {
 		return err

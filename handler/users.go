@@ -18,10 +18,10 @@ type UsersHandler interface {
 }
 
 type UsersHandlerImpl struct {
-	usersService service.UsersService
+	usersService service.Users
 }
 
-func UsersHandlerInit(service service.UsersService) *UsersHandlerImpl {
+func UsersHandlerInit(service service.Users) *UsersHandlerImpl {
 	return &UsersHandlerImpl{service}
 }
 
