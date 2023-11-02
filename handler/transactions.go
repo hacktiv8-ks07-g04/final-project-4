@@ -2,12 +2,12 @@ package handler
 
 import "github.com/hacktiv8-ks07-g04/final-project-4/service"
 
-type TransactionsHandler interface{}
+type Transactions interface{}
 
-type TransactionsHandlerImpl struct {
+type TransactionsImpl struct {
 	transactionsService service.Transactions
 }
 
-func TransactionsHandlerInit(service service.Transactions) *TransactionsHandlerImpl {
-	return &TransactionsHandlerImpl{service}
+func InitTransactions(service service.Transactions) *TransactionsImpl {
+	return &TransactionsImpl{service}
 }

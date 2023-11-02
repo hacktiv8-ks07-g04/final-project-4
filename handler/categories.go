@@ -10,22 +10,22 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
 
-type CategoriesHandler interface {
+type Categories interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
 }
 
-type CategoriesHandlerImpl struct {
+type CategoriesImpl struct {
 	categoriesService service.Categories
 }
 
-func CategoriesHandlerInit(service service.Categories) *CategoriesHandlerImpl {
-	return &CategoriesHandlerImpl{service}
+func InitCategories(service service.Categories) *CategoriesImpl {
+	return &CategoriesImpl{service}
 }
 
-func (h *CategoriesHandlerImpl) Create(c *gin.Context) {
+func (h *CategoriesImpl) Create(c *gin.Context) {
 	body := dto.CreateCategoryRequest{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -49,7 +49,7 @@ func (h *CategoriesHandlerImpl) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (h *CategoriesHandlerImpl) GetAll(c *gin.Context) {
+func (h *CategoriesImpl) GetAll(c *gin.Context) {
 	categories, err := h.categoriesService.GetAll()
 	if err != nil {
 		c.JSON(http.StatusNotFound, errs.NotFound("categories not found"))
@@ -83,7 +83,7 @@ func (h *CategoriesHandlerImpl) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *CategoriesHandlerImpl) Update(c *gin.Context) {
+func (h *CategoriesImpl) Update(c *gin.Context) {
 	body := dto.CreateCategoryRequest{}
 	id := c.Param("categoryId")
 
@@ -108,7 +108,7 @@ func (h *CategoriesHandlerImpl) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *CategoriesHandlerImpl) Delete(c *gin.Context) {
+func (h *CategoriesImpl) Delete(c *gin.Context) {
 	id := c.Param("categoryId")
 
 	err := h.categoriesService.Delete(id)

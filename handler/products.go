@@ -11,22 +11,22 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
 
-type ProductsHandler interface {
+type Products interface {
 	Create(c *gin.Context)
 	GetAll(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
 }
 
-type ProductsHandlerImpl struct {
+type ProductsImpl struct {
 	productsService service.Products
 }
 
-func ProductsHandlerInit(service service.Products) *ProductsHandlerImpl {
-	return &ProductsHandlerImpl{service}
+func InitProducts(service service.Products) *ProductsImpl {
+	return &ProductsImpl{service}
 }
 
-func (h *ProductsHandlerImpl) Create(c *gin.Context) {
+func (h *ProductsImpl) Create(c *gin.Context) {
 	body := dto.CreateProductRequest{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -52,7 +52,7 @@ func (h *ProductsHandlerImpl) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (h *ProductsHandlerImpl) GetAll(c *gin.Context) {
+func (h *ProductsImpl) GetAll(c *gin.Context) {
 	products, err := h.productsService.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
@@ -75,7 +75,7 @@ func (h *ProductsHandlerImpl) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *ProductsHandlerImpl) Update(c *gin.Context) {
+func (h *ProductsImpl) Update(c *gin.Context) {
 	body := dto.UpdateProductRequest{}
 	id := c.Param("productId")
 
@@ -106,7 +106,7 @@ func (h *ProductsHandlerImpl) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *ProductsHandlerImpl) Delete(c *gin.Context) {
+func (h *ProductsImpl) Delete(c *gin.Context) {
 	id := c.Param("productId")
 
 	err := h.productsService.Delete(id)

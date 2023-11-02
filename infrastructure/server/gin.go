@@ -27,7 +27,7 @@ func Setup() *gin.Engine {
 	// Users
 	usersRepo := repository.InitUsers(db)
 	usersService := service.InitUsers(usersRepo)
-	usersHandler := handler.UsersHandlerInit(usersService)
+	usersHandler := handler.InitUsers(usersService)
 
 	users := router.Group("/users")
 	{
@@ -39,7 +39,7 @@ func Setup() *gin.Engine {
 	// Categories
 	categoriesRepo := repository.InitCategories(db)
 	categoriesService := service.InitCategories(categoriesRepo)
-	categoriesHandler := handler.CategoriesHandlerInit(categoriesService)
+	categoriesHandler := handler.InitCategories(categoriesService)
 
 	categories := router.Group("/categories").Use(middleware.Authentication())
 	{
@@ -52,7 +52,7 @@ func Setup() *gin.Engine {
 	// Products
 	productsRepo := repository.InitProducts(db)
 	productsService := service.InitProducts(productsRepo)
-	productsHandler := handler.ProductsHandlerInit(productsService)
+	productsHandler := handler.InitProducts(productsService)
 
 	products := router.Group("/products").Use(middleware.Authentication())
 	{
@@ -65,7 +65,7 @@ func Setup() *gin.Engine {
 	// Transactions
 	transactionsRepo := repository.InitTransactions(db)
 	transactionsService := service.InitTransactions(transactionsRepo)
-	transactionsHandler := handler.TransactionsHandlerInit(transactionsService)
+	transactionsHandler := handler.InitTransactions(transactionsService)
 
 	transactions := router.Group("/transactions").Use(middleware.Authentication())
 	{

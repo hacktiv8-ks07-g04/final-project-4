@@ -11,21 +11,21 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/service"
 )
 
-type UsersHandler interface {
+type Users interface {
 	Register(c *gin.Context)
 	Login(c *gin.Context)
 	TopUp(c *gin.Context)
 }
 
-type UsersHandlerImpl struct {
+type UsersImpl struct {
 	usersService service.Users
 }
 
-func UsersHandlerInit(service service.Users) *UsersHandlerImpl {
-	return &UsersHandlerImpl{service}
+func InitUsers(service service.Users) *UsersImpl {
+	return &UsersImpl{service}
 }
 
-func (u *UsersHandlerImpl) Register(c *gin.Context) {
+func (u *UsersImpl) Register(c *gin.Context) {
 	body := dto.RegisterRequest{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -51,7 +51,7 @@ func (u *UsersHandlerImpl) Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (u *UsersHandlerImpl) Login(c *gin.Context) {
+func (u *UsersImpl) Login(c *gin.Context) {
 	body := dto.LoginRequest{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -72,7 +72,7 @@ func (u *UsersHandlerImpl) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (u *UsersHandlerImpl) TopUp(c *gin.Context) {
+func (u *UsersImpl) TopUp(c *gin.Context) {
 	user := c.MustGet("user").(map[string]interface{})
 	body := dto.TopUpRequest{}
 
