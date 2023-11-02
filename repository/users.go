@@ -8,21 +8,21 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 )
 
-type UsersRepository interface {
+type Users interface {
 	Register(user entity.User) (entity.User, error)
 	Login(email, password string) (entity.User, error)
 	TopUp(id uint, balance int) (entity.User, error)
 }
 
-type UsersRepositoryImpl struct {
+type UsersImpl struct {
 	db *gorm.DB
 }
 
-func UsersRepositoryInit(db *gorm.DB) *UsersRepositoryImpl {
-	return &UsersRepositoryImpl{db}
+func InitUsers(db *gorm.DB) *UsersImpl {
+	return &UsersImpl{db}
 }
 
-func (ur *UsersRepositoryImpl) Register(user entity.User) (entity.User, error) {
+func (ur *UsersImpl) Register(user entity.User) (entity.User, error) {
 	err := ur.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&user).Error
 		if err != nil {
@@ -35,7 +35,7 @@ func (ur *UsersRepositoryImpl) Register(user entity.User) (entity.User, error) {
 	return user, err
 }
 
-func (ur *UsersRepositoryImpl) Login(email, password string) (entity.User, error) {
+func (ur *UsersImpl) Login(email, password string) (entity.User, error) {
 	var user entity.User
 
 	err := ur.db.Transaction(func(tx *gorm.DB) error {
@@ -50,7 +50,7 @@ func (ur *UsersRepositoryImpl) Login(email, password string) (entity.User, error
 	return user, err
 }
 
-func (ur *UsersRepositoryImpl) TopUp(id uint, balance int) (entity.User, error) {
+func (ur *UsersImpl) TopUp(id uint, balance int) (entity.User, error) {
 	var user entity.User
 
 	err := ur.db.Transaction(func(tx *gorm.DB) error {

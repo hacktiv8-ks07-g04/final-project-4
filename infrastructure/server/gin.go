@@ -25,7 +25,7 @@ func Setup() *gin.Engine {
 	})
 
 	// Users
-	usersRepo := repository.UsersRepositoryInit(db)
+	usersRepo := repository.InitUsers(db)
 	usersService := service.InitUsers(usersRepo)
 	usersHandler := handler.UsersHandlerInit(usersService)
 
@@ -37,7 +37,7 @@ func Setup() *gin.Engine {
 	}
 
 	// Categories
-	categoriesRepo := repository.CategoriesRepositoryInit(db)
+	categoriesRepo := repository.InitCategories(db)
 	categoriesService := service.InitCategories(categoriesRepo)
 	categoriesHandler := handler.CategoriesHandlerInit(categoriesService)
 
@@ -50,7 +50,7 @@ func Setup() *gin.Engine {
 	}
 
 	// Products
-	productsRepo := repository.ProductsRepositoryInit(db)
+	productsRepo := repository.InitProducts(db)
 	productsService := service.InitProducts(productsRepo)
 	productsHandler := handler.ProductsHandlerInit(productsService)
 
@@ -63,7 +63,7 @@ func Setup() *gin.Engine {
 	}
 
 	// Transactions
-	transactionsRepo := repository.TransactionsRepositoryInit(db)
+	transactionsRepo := repository.InitTransactions(db)
 	transactionsService := service.InitTransactions(transactionsRepo)
 	transactionsHandler := handler.TransactionsHandlerInit(transactionsService)
 

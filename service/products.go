@@ -16,10 +16,10 @@ type Products interface {
 }
 
 type ProductsImpl struct {
-	productsRepo repository.ProductsRepository
+	productsRepo repository.Products
 }
 
-func InitProducts(repository repository.ProductsRepository) *ProductsImpl {
+func InitProducts(repository repository.Products) *ProductsImpl {
 	return &ProductsImpl{repository}
 }
 

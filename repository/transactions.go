@@ -4,12 +4,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type TransactionsRepository interface{}
+type Transactions interface{}
 
-type TransactionsRepositoryImpl struct {
+type TransactionsImpl struct {
 	db *gorm.DB
 }
 
-func TransactionsRepositoryInit(db *gorm.DB) *TransactionsRepositoryImpl {
-	return &TransactionsRepositoryImpl{db}
+func InitTransactions(db *gorm.DB) *TransactionsImpl {
+	return &TransactionsImpl{db}
 }

@@ -16,10 +16,10 @@ type Users interface {
 }
 
 type UsersImpl struct {
-	usersRepository repository.UsersRepository
+	usersRepository repository.Users
 }
 
-func InitUsers(repository repository.UsersRepository) *UsersImpl {
+func InitUsers(repository repository.Users) *UsersImpl {
 	return &UsersImpl{repository}
 }
 

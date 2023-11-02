@@ -14,10 +14,10 @@ type Categories interface {
 }
 
 type CategoriesImpl struct {
-	categoriesRepo repository.CategoriesRepository
+	categoriesRepo repository.Categories
 }
 
-func InitCategories(repository repository.CategoriesRepository) *CategoriesImpl {
+func InitCategories(repository repository.Categories) *CategoriesImpl {
 	return &CategoriesImpl{repository}
 }
 

@@ -6,7 +6,7 @@ import (
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 )
 
-type CategoriesRepository interface {
+type Categories interface {
 	Create(category entity.Category) (entity.Category, error)
 	Get(id string) (entity.Category, error)
 	GetAll() ([]entity.Category, error)
@@ -14,15 +14,15 @@ type CategoriesRepository interface {
 	Delete(id string) error
 }
 
-type CategoriesRepositoryImpl struct {
+type CategoriesImpl struct {
 	db *gorm.DB
 }
 
-func CategoriesRepositoryInit(db *gorm.DB) *CategoriesRepositoryImpl {
-	return &CategoriesRepositoryImpl{db}
+func InitCategories(db *gorm.DB) *CategoriesImpl {
+	return &CategoriesImpl{db}
 }
 
-func (cr *CategoriesRepositoryImpl) Create(category entity.Category) (entity.Category, error) {
+func (cr *CategoriesImpl) Create(category entity.Category) (entity.Category, error) {
 	err := cr.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&category).Error
 		if err != nil {
@@ -35,7 +35,7 @@ func (cr *CategoriesRepositoryImpl) Create(category entity.Category) (entity.Cat
 	return category, err
 }
 
-func (cr *CategoriesRepositoryImpl) Get(id string) (entity.Category, error) {
+func (cr *CategoriesImpl) Get(id string) (entity.Category, error) {
 	var category entity.Category
 
 	err := cr.db.Transaction(func(tx *gorm.DB) error {
@@ -53,7 +53,7 @@ func (cr *CategoriesRepositoryImpl) Get(id string) (entity.Category, error) {
 	return category, nil
 }
 
-func (cr *CategoriesRepositoryImpl) GetAll() ([]entity.Category, error) {
+func (cr *CategoriesImpl) GetAll() ([]entity.Category, error) {
 	var categories []entity.Category
 
 	err := cr.db.Transaction(func(tx *gorm.DB) error {
@@ -71,7 +71,7 @@ func (cr *CategoriesRepositoryImpl) GetAll() ([]entity.Category, error) {
 	return categories, nil
 }
 
-func (cr *CategoriesRepositoryImpl) Update(id, updatedType string) (entity.Category, error) {
+func (cr *CategoriesImpl) Update(id, updatedType string) (entity.Category, error) {
 	var category entity.Category
 
 	err := cr.db.Transaction(func(tx *gorm.DB) error {
@@ -92,7 +92,7 @@ func (cr *CategoriesRepositoryImpl) Update(id, updatedType string) (entity.Categ
 	return category, err
 }
 
-func (cr *CategoriesRepositoryImpl) Delete(id string) error {
+func (cr *CategoriesImpl) Delete(id string) error {
 	var category entity.Category
 	var err error
 
