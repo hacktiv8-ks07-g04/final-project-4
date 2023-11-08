@@ -81,7 +81,7 @@ func (r *CategoriesImpl) Update(id, updatedType string) (entity.Category, error)
 			return err
 		}
 
-		err = tx.Preload("Products").Find(&category).Error
+		err = tx.Preload("Products").First(&category, id).Error
 		if err != nil {
 			return err
 		}

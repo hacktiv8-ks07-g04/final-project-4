@@ -66,9 +66,15 @@ func Setup() *gin.Engine {
 	transactionsRepo := repository.InitTransactions(db)
 	transactionsService := service.InitTransactions(transactionsRepo)
 	transactionsHandler := handler.InitTransactions(transactionsService)
+	_ = transactionsHandler
 
 	transactions := router.Group("/transactions").Use(middleware.Authentication())
 	{
+		transactions.GET("/", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Welcome to the transactions API",
+			})
+		})
 	}
 
 	// Auth Purpose
