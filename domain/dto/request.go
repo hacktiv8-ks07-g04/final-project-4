@@ -27,8 +27,8 @@ type CreateProductRequest struct {
 }
 
 type UpdateProductRequest struct {
-	Title      string `json:"title,omitempty"       valid:"type(string)"`
-	Price      int    `json:"price,omitempty"       valid:"type(int),range(0|50000000)~price must be between 0 and 50.000.000"`
-	Stock      int    `json:"stock,omitempty"       valid:"type(int),range(5|1000000)~stock must be at least 5"`
+	Title      string `json:"title,omitempty"`
+	Price      int    `json:"price,omitempty"       binding:"omitempty,number,min=0,max=50000000"`
+	Stock      int    `json:"stock,omitempty"       binding:"omitempty,number,min=5,max=1000000"`
 	CategoryID uint   `json:"category_id,omitempty"`
 }

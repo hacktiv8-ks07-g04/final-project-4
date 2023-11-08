@@ -16,7 +16,7 @@ type Product struct {
 	Transactions []TransactionHistory `gorm:"foreignKey:ProductID;constraint:OnUpdate:CASCADE" json:"transactions,omitempty"`
 }
 
-func (p *Product) BeforeSave(tx *gorm.DB) error {
+func (p *Product) BeforeCreate(tx *gorm.DB) error {
 	_, err := govalidator.ValidateStruct(p)
 	if err != nil {
 		return err

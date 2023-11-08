@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -78,9 +77,6 @@ func (h *ProductsImpl) GetAll(c *gin.Context) {
 func (h *ProductsImpl) Update(c *gin.Context) {
 	body := dto.UpdateProductRequest{}
 	id := c.Param("productId")
-
-	log.Print("id ", id)
-	log.Print("body ", body)
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, errs.BadRequest("invalid request body"))

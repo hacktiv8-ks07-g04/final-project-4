@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/dto"
 	"github.com/hacktiv8-ks07-g04/final-project-4/domain/entity"
 	"github.com/hacktiv8-ks07-g04/final-project-4/repository"
@@ -52,7 +50,6 @@ func (s *ProductsImpl) Update(
 	id string,
 	req dto.UpdateProductRequest,
 ) (entity.Product, error) {
-	log.Print("req", req)
 	product, err := s.repository.Update(id, req)
 	if err != nil {
 		return product, err
