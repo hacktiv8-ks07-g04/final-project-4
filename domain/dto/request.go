@@ -32,3 +32,8 @@ type UpdateProductRequest struct {
 	Stock      int    `json:"stock,omitempty"       binding:"omitempty,number,min=5,max=1000000"`
 	CategoryID uint   `json:"category_id,omitempty"`
 }
+
+type CreateTransactionRequest struct {
+	ProductID int `json:"product_id" binding:"required,number,min=1,max=1000"`
+	Quantity  int `json:"quantity"   binding:"required,number,min=1,max=1000"`
+}

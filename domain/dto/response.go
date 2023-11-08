@@ -68,3 +68,14 @@ type UpdateProductResponse struct {
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
+
+type TransactionBill struct {
+	TotalPrice   int    `json:"total_price"`
+	Quantity     int    `json:"quantity"`
+	ProductTitle string `json:"product_title"`
+}
+
+type CreateTransactionResponse struct {
+	Message         string          `json:"message"`
+	TransactionBill TransactionBill `json:"transaction_bill"`
+}
