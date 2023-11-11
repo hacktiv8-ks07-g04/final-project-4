@@ -12,6 +12,7 @@ import (
 
 type Transactions interface {
 	Create(c *gin.Context)
+	GetUserTransactions(c *gin.Context)
 }
 
 type TransactionsImpl struct {
@@ -39,4 +40,21 @@ func (h *TransactionsImpl) Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, response)
+}
+
+func (h *TransactionsImpl) GetUserTransactions(c *gin.Context) {
+	user := c.MustGet("user").(map[string]interface{})
+	userID := user["id"].(uint)
+
+	response, err := h.service.GetUserTransactions(userID)
+	if err != nil {
+		if err.Error() == "transactions not found" {
+			c.JSON(http.StatusNotFound, errs.NotFound("transactions not found"))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }

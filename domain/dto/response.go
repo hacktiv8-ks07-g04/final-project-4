@@ -79,3 +79,22 @@ type CreateTransactionResponse struct {
 	Message         string          `json:"message"`
 	TransactionBill TransactionBill `json:"transaction_bill"`
 }
+
+type Product struct {
+	ID         uint   `json:"id"`
+	Title      string `json:"title"`
+	Price      int    `json:"price"`
+	Stock      int    `json:"stock"`
+	CategoryID uint   `json:"category_id"`
+	CreatedAt  string `json:"created_at"`
+	UpdatedAt  string `json:"updated_at"`
+}
+
+type TransactionHistory struct {
+	ID         uint    `json:"id"`
+	ProductID  uint    `json:"product_id"`
+	UserID     uint    `json:"user_id"`
+	Quantity   int     `json:"quantity"`
+	TotalPrice int     `json:"total_price"`
+	Product    Product `json:"product"`
+}

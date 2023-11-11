@@ -7,6 +7,7 @@ import (
 
 type Transactions interface {
 	Create(userID uint, req dto.CreateTransactionRequest) (dto.CreateTransactionResponse, error)
+	GetUserTransactions(userID uint) ([]dto.TransactionHistory, error)
 }
 
 type TransactionsImpl struct {
@@ -36,4 +37,13 @@ func (s TransactionsImpl) Create(
 	}
 
 	return response, nil
+}
+
+func (s TransactionsImpl) GetUserTransactions(userID uint) ([]dto.TransactionHistory, error) {
+	transactions, err := s.repository.GetUserTransactions(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions, err
 }

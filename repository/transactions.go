@@ -11,6 +11,7 @@ import (
 
 type Transactions interface {
 	Create(userID uint, req dto.CreateTransactionRequest) (dto.TransactionBill, error)
+	GetUserTransactions(userID uint) ([]dto.TransactionHistory, error)
 }
 
 type TransactionsImpl struct {
@@ -27,7 +28,7 @@ func (r *TransactionsImpl) Create(
 ) (dto.TransactionBill, error) {
 	var (
 		product            entity.Product
-		transactionHistory entity.TransactionHistory
+		transactionHistory dto.TransactionHistory
 		totalPrice         int
 		transactionBill    dto.TransactionBill
 	)
@@ -39,7 +40,7 @@ func (r *TransactionsImpl) Create(
 
 		totalPrice = product.Price * req.Quantity
 
-		transactionHistory = entity.TransactionHistory{
+		transactionHistory = dto.TransactionHistory{
 			Quantity:   req.Quantity,
 			TotalPrice: totalPrice,
 			UserID:     userID,
@@ -58,4 +59,22 @@ func (r *TransactionsImpl) Create(
 	})
 
 	return transactionBill, err
+}
+
+func (r *TransactionsImpl) GetUserTransactions(userID uint) ([]dto.TransactionHistory, error) {
+	var transactions []dto.TransactionHistory
+
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Preload("Product").Where("user_id = ?", userID).Find(&transactions).Error; err != nil {
+			return errors.New("transactions not found")
+		}
+
+		if len(transactions) == 0 {
+			return errors.New("transactions not found")
+		}
+
+		return nil
+	})
+
+	return transactions, err
 }

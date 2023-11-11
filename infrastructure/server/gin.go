@@ -70,6 +70,7 @@ func Setup() *gin.Engine {
 	transactions := router.Group("/transactions").Use(middleware.Authentication())
 	{
 		transactions.POST("/", transactionsHandler.Create)
+		transactions.GET("/my-transactions", transactionsHandler.GetUserTransactions)
 	}
 
 	// Auth Purpose
