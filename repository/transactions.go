@@ -12,6 +12,7 @@ import (
 type Transactions interface {
 	Create(userID uint, req dto.CreateTransactionRequest) (dto.TransactionBill, error)
 	GetUserTransactions(userID uint) ([]dto.TransactionHistory, error)
+	GetAll() ([]entity.TransactionHistory, error)
 }
 
 type TransactionsImpl struct {
@@ -71,6 +72,24 @@ func (r *TransactionsImpl) GetUserTransactions(userID uint) ([]dto.TransactionHi
 
 		if len(transactions) == 0 {
 			return errors.New("transactions not found")
+		}
+
+		return nil
+	})
+
+	return transactions, err
+}
+
+func (r *TransactionsImpl) GetAll() ([]entity.TransactionHistory, error) {
+	var transactions []entity.TransactionHistory
+
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Preload("Product").Preload("User").Find(&transactions).Error; err != nil {
+			return errors.New("transactions not found")
+		}
+
+		if len(transactions) == 0 {
+			return errors.New("transactions are empty")
 		}
 
 		return nil

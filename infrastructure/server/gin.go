@@ -71,6 +71,11 @@ func Setup() *gin.Engine {
 	{
 		transactions.POST("/", transactionsHandler.Create)
 		transactions.GET("/my-transactions", transactionsHandler.GetUserTransactions)
+		transactions.GET(
+			"/user-transactions",
+			middleware.AdminAuthorization(),
+			transactionsHandler.GetAll,
+		)
 	}
 
 	// Auth Purpose

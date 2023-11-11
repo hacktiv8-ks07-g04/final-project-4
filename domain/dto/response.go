@@ -80,6 +80,15 @@ type CreateTransactionResponse struct {
 	TransactionBill TransactionBill `json:"transaction_bill"`
 }
 
+type User struct {
+	ID        uint   `json:"id"`
+	FullName  string `json:"full_name"`
+	Email     string `json:"email"`
+	Balance   int    `json:"balance"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
 type Product struct {
 	ID         uint   `json:"id"`
 	Title      string `json:"title"`
@@ -97,4 +106,14 @@ type TransactionHistory struct {
 	Quantity   int     `json:"quantity"`
 	TotalPrice int     `json:"total_price"`
 	Product    Product `json:"product"`
+}
+
+type GetAllTransactionsResponse struct {
+	ID         uint    `json:"id"`
+	ProductID  uint    `json:"product_id"`
+	UserID     uint    `json:"user_id"`
+	Quantity   int     `json:"quantity"`
+	TotalPrice int     `json:"total_price"`
+	Product    Product `json:"product"`
+	User       User    `json:"user"`
 }

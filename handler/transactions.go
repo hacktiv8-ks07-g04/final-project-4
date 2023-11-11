@@ -13,6 +13,7 @@ import (
 type Transactions interface {
 	Create(c *gin.Context)
 	GetUserTransactions(c *gin.Context)
+	GetAll(c *gin.Context)
 }
 
 type TransactionsImpl struct {
@@ -50,6 +51,20 @@ func (h *TransactionsImpl) GetUserTransactions(c *gin.Context) {
 	if err != nil {
 		if err.Error() == "transactions not found" {
 			c.JSON(http.StatusNotFound, errs.NotFound("transactions not found"))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *TransactionsImpl) GetAll(c *gin.Context) {
+	response, err := h.service.GetAll()
+	if err != nil {
+		if err.Error() == "transactions are empty" {
+			c.JSON(http.StatusNotFound, errs.NotFound("transactions are empty"))
 			return
 		}
 		c.JSON(http.StatusInternalServerError, errs.InternalServerError(err.Error()))
