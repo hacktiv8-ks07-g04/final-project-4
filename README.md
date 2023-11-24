@@ -5,7 +5,7 @@ Link to the project:
 > https://final-project-4-production-2127.up.railway.app/
 
 Admin account:
-- Username: admin
+- Email: admin@gmail.com
 - Password: admin123
 
 ## API Specification
