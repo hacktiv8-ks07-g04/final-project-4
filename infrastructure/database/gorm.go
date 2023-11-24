@@ -20,6 +20,7 @@ var (
 func Init() {
 	Connect()
 	Migration()
+	createUserAdmin()
 }
 
 func Connect() {
@@ -50,6 +51,16 @@ func Migration() {
 		&entity.Product{},
 		&entity.TransactionHistory{},
 	)
+}
+
+func createUserAdmin() {
+	db.Create(&entity.User{
+		FullName: "admin",
+		Email:    "admin@gmail.com",
+		Password: "admin123",
+		Role:     "admin",
+		Balance:  1000000,
+	})
 }
 
 func GetInstance() *gorm.DB {
